@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>💰 Meu Banco Pessoal</title>
+    <style>
+    /* RESET E FONTE */
+    * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Roboto, sans-serif; }
+    
+    body { 
+        background-color: #0f0f12; /* Fundo quase preto */
+        color: #e0e0e0; 
+        display: flex; 
+        justify-content: center; 
+        padding: 20px;
+        min-height: 100vh;
+    }
+
+    /* CONTAINER PRINCIPAL COM BRILHO ROXO */
+    .container { 
+        background: #16161a; 
+        width: 100%; 
+        max-width: 500px; 
+        padding: 30px; 
+        border-radius: 24px; 
+        box-shadow: 0 0 20px rgba(187, 134, 252, 0.1); 
+        border: 1px solid #2d2d35;
+    }
+
+    h1 { 
+        text-align: center; 
+        margin-bottom: 30px; 
+        color: #bb86fc; 
+        font-size: 24px;
+        text-transform: uppercase;
+        letter-spacing: 2px;
+        text-shadow: 0 0 10px rgba(187, 134, 252, 0.5);
+    }
+
+    /* PAINEL DE SALDOS ESTILO CARD NEON */
+    .painel-saldos { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 25px; }
+    
+    .card { 
+        background: #1f1f27; 
+        padding: 15px; 
+        border-radius: 16px; 
+        text-align: center; 
+        border: 1px solid #2d2d35;
+        transition: transform 0.3s;
+    }
+
+    .card:hover { transform: translateY(-5px); border-color: #bb86fc; }
+
+    .card-principal { 
+        grid-column: span 2; 
+        background: linear-gradient(145deg, #1f1f27, #16161a);
+        border: 1px solid #bb86fc;
+        box-shadow: inset 0 0 15px rgba(187, 134, 252, 0.05);
+    }
+
+    .positivo { color: #03dac6; font-weight: bold; text-shadow: 0 0 5px rgba(3, 218, 198, 0.3); }
+    .negativo { color: #ff4081; font-weight: bold; text-shadow: 0 0 5px rgba(255, 64, 129, 0.3); }
+
+    /* INPUTS E BOTÕES */
+    .form-group { display: flex; flex-direction: column; gap: 12px; margin-bottom: 25px; }
+    
+    input, select { 
+        background: #1f1f27; 
+        color: #fff; 
+        border: 1px solid #333; 
+        padding: 14px; 
+        border-radius: 12px; 
+        outline: none;
+        transition: 0.3s;
+    }
+
+    input:focus, select:focus { border-color: #bb86fc; box-shadow: 0 0 10px rgba(187, 134, 252, 0.2); }
+
+    #btn-adicionar { 
+        background: #bb86fc; 
+        color: #000; 
+        font-weight: 800; 
+        cursor: pointer; 
+        border: none;
+        padding: 15px;
+        text-transform: uppercase;
+        box-shadow: 0 4px 15px rgba(187, 134, 252, 0.4);
+    }
+
+    #btn-adicionar:hover { background: #d7b7fd; transform: scale(1.02); }
+
+    .acoes { display: flex; gap: 10px; margin-bottom: 25px; }
+    
+    .btn-limpar { background: #333; color: #fff; flex: 1; }
+    .btn-pdf { background: #03dac6; color: #000; flex: 1; }
+
+    /* LISTA DE GASTOS */
+    ul { margin-top: 20px; }
+    
+    li { 
+        display: flex; 
+        justify-content: space-between; 
+        align-items: center; 
+        padding: 15px; 
+        background: #1f1f27;
+        margin-bottom: 10px;
+        border-radius: 12px;
+        border-left: 4px solid #bb86fc;
+    }
+
+    li span { color: #bbb; font-size: 14px; }
+    li strong { font-size: 16px; }
+
+    /* GRÁFICO */
+    .grafico-container { 
+        margin: 20px 0; 
+        background: #1f1f27; 
+        padding: 15px; 
+        border-radius: 16px;
+    }
+</style>
+</head>
+<body>
+
+    <div class="container">
+        <h1>💰 Meu Banco Pessoal</h1>
+        
+        <div class="painel-saldos">
+            <div class="card">
+                <small>Entradas</small>
+                <p id="total-entradas" class="positivo">R$ 0,00</p>
+            </div>
+            <div class="card">
+                <small>Saídas</small>
+                <p id="total-saidas" class="negativo">R$ 0,00</p>
+            </div>
+            <div class="card card-principal">
+                <small>Saldo Atual</small>
+                <p id="saldo-total">R$ 0,00</p>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <select id="tipo">
+                <option value="entrada">📈 Entrada (Ganho)</option>
+                <option value="saida" selected>📉 Saída (Gasto)</option>
+            </select>
+            <select id="categoria">
+                <option value="💰 Salário">💰 Salário</option>
+                <option value="🍕 Alimentação">🍕 Alimentação</option>
+                <option value="🚗 Transporte">🚗 Transporte</option>
+                <option value="🏠 Casa">🏠 Casa</option>
+                <option value="🎮 Lazer">🎮 Lazer</option>
+                <option value="💊 Saúde">💊 Saúde</option>
+                <option value="🎁 outros">🎁 outros</option>
+            </select>
+            <input type="date" id="data-mov">
+            <input type="text" id="descricao" placeholder="Descrição">
+            <input type="number" id="valor" placeholder="Valor R$">
+            <button id="btn-adicionar">Adicionar Movimentação</button>
+        </div>
+
+        <div class="acoes">
+            <button onclick="limparTudo()" class="btn-limpar">Limpar Tudo</button>
+            <button onclick="exportarPDF()" class="btn-pdf">Baixar PDF</button>
+        </div>
+
+        <div class="grafico-container">
+            <canvas id="meuGrafico"></canvas>
+        </div>
+
+        <ul id="lista-gastos"></ul>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+
+    <script>
+        // JAVASCRIPT INTEGRADO
+        let movimentacoes = JSON.parse(localStorage.getItem('minhasFinancas')) || [];
+        let meuGrafico = null;
+
+        window.onload = function() {
+            document.getElementById('data-mov').valueAsDate = new Date();
+            atualizarTela();
+        };
+
+        // Escutador do botão Adicionar
+        document.getElementById('btn-adicionar').addEventListener('click', function() {
+            const tipo = document.getElementById('tipo').value;
+            const categoria = document.getElementById('categoria').value;
+            const data = document.getElementById('data-mov').value;
+            const desc = document.getElementById('descricao').value;
+            const valor = parseFloat(document.getElementById('valor').value);
+
+            if (desc && valor > 0 && data) {
+                const novaMov = { id: Date.now(), tipo, categoria, data, desc, valor };
+                movimentacoes.push(novaMov);
+                localStorage.setItem('minhasFinancas', JSON.stringify(movimentacoes));
+                
+                document.getElementById('descricao').value = '';
+                document.getElementById('valor').value = '';
+                atualizarTela();
+            } else {
+                alert("Preencha todos os campos!");
+            }
+        });
+
+        function atualizarTela() {
+            const listaHTML = document.getElementById('lista-gastos');
+            listaHTML.innerHTML = '';
+            
+            let entradas = 0, saidas = 0;
+            const totaisPorCategoria = {};
+
+            movimentacoes.forEach(mov => {
+                if (mov.tipo === 'entrada') {
+                    entradas += mov.valor;
+                } else {
+                    saidas += mov.valor;
+                    totaisPorCategoria[mov.categoria] = (totaisPorCategoria[mov.categoria] || 0) + mov.valor;
+                }
+
+                // Proteção contra erro de split se a data estiver vazia
+                const dataBr = mov.data ? mov.data.split('-').reverse().join('/') : '00/00/0000';
+                
+                const item = document.createElement('li');
+                item.innerHTML = `
+                    <div>
+                        <small style="display:block; color:#888">${dataBr} - ${mov.categoria}</small>
+                        <span>${mov.desc}</span>
+                    </div>
+                    <strong class="${mov.tipo === 'entrada' ? 'positivo' : 'negativo'}">
+                        ${mov.tipo === 'entrada' ? '+' : '-'} R$ ${mov.valor.toFixed(2)}
+                    </strong>
+                    <button onclick="removerMov(${mov.id})" style="color:red; border:none; background:none; cursor:pointer; margin-left:10px; font-weight:bold;">X</button>
+                `;
+                listaHTML.appendChild(item);
+            });
+
+            const saldo = entradas - saidas;
+            document.getElementById('total-entradas').innerText = `R$ ${entradas.toFixed(2)}`;
+            document.getElementById('total-saidas').innerText = `R$ ${saidas.toFixed(2)}`;
+            document.getElementById('saldo-total').innerText = `R$ ${saldo.toFixed(2)}`;
+            document.getElementById('saldo-total').className = saldo >= 0 ? 'positivo' : 'negativo';
+
+            renderizarGrafico(totaisPorCategoria);
+        }
+
+        // Função para o botão X (REMOVER)
+        window.removerMov = function(id) {
+            if (confirm("Deseja realmente excluir este item?")) {
+                movimentacoes = movimentacoes.filter(m => m.id !== id);
+                localStorage.setItem('minhasFinancas', JSON.stringify(movimentacoes));
+                atualizarTela();
+            }
+        };
+
+        function renderizarGrafico(dados) {
+            const canvas = document.getElementById('meuGrafico');
+            if (!canvas) return;
+            const ctx = canvas.getContext('2d');
+            if (meuGrafico) meuGrafico.destroy();
+            if (Object.keys(dados).length === 0) return;
+
+            meuGrafico = new Chart(ctx, {
+                type: 'pie',
+                data: {
+                    labels: Object.keys(dados),
+                    datasets: [{
+                        data: Object.values(dados),
+                        backgroundColor: ['#2ecc71', '#3498db', '#9b59b6', '#f1c40f', '#e67e22', '#e74c3c']
+                    }]
+                },
+                options: { plugins: { legend: { position: 'bottom' } } }
+            });
+        }
+
+        function limparTudo() {
+            if (confirm("Apagar todos os dados do banco?")) {
+                movimentacoes = [];
+                localStorage.setItem('minhasFinancas', JSON.stringify(movimentacoes));
+                atualizarTela();
+            }
+        }
+
+        function exportarPDF() {
+            const elemento = document.querySelector(".container");
+            html2pdf().from(elemento).save('financeiro.pdf');
+        }
+    </script>
+</body>
+</html>

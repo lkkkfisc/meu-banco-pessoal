@@ -1,0 +1,157 @@
+/* Configuração Geral */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+body {
+    background-color: #f4f7f6;
+    display: flex;
+    justify-content: center;
+    padding: 40px 20px;
+}
+
+.container {
+    background-color: #fff;
+    width: 100%;
+    max-width: 400px;
+    padding: 30px;
+    border-radius: 15px;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+}
+
+h1 {
+    text-align: center;
+    color: #2c3e50;
+    margin-bottom: 25px;
+}
+
+/* Formulário de Entrada */
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-bottom: 25px;
+}
+
+input {
+    padding: 12px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    outline: none;
+    transition: 0.3s;
+}
+
+input:focus {
+    border-color: #2ecc71;
+}
+
+button {
+    background-color: #2ecc71;
+    color: white;
+    border: none;
+    padding: 12px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: bold;
+    font-size: 16px;
+    transition: background 0.3s;
+}
+
+button:hover {
+    background-color: #27ae60;
+}
+
+/* Área do Resumo/Total */
+.resumo {
+    background-color: #ecf0f1;
+    padding: 15px;
+    border-radius: 8px;
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+#total {
+    color: #27ae60;
+    font-size: 1.5rem;
+}
+
+/* Lista de Gastos */
+ul {
+    list-style: none;
+}
+
+li {
+    background: #fff;
+    border-bottom: 1px solid #eee;
+    padding: 10px 5px;
+    display: flex;
+    justify-content: space-between;
+    color: #34495e;
+}
+
+li strong {
+    color: #e74c3c; /* Cor vermelha para o valor do gasto */
+}
+select {
+    padding: 12px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    background-color: #fff;
+    cursor: pointer;
+}
+
+li {
+    display: flex;
+    justify-content: space-between;
+    align-items: center; /* Alinha o texto e o valor verticalmente */
+    padding: 12px 5px;
+    border-bottom: 1px solid #eee;
+}
+
+li div span {
+    font-weight: 500;
+}
+.acoes {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+.btn-limpar {
+    background-color: #e74c3c !important; /* Vermelho */
+    flex: 1;
+}
+
+.btn-pdf {
+    background-color: #3498db !important; /* Azul */
+    flex: 1;
+}
+
+.btn-limpar:hover { background-color: #c0392b !important; }
+.btn-pdf:hover { background-color: #2980b9 !important; }
+.painel-saldos {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+.card {
+    background: #f8f9fa;
+    padding: 15px;
+    border-radius: 10px;
+    text-align: center;
+    border-bottom: 4px solid #ccc;
+}
+
+.card:last-child {
+    grid-column: span 2; /* Saldo total ocupa a linha toda */
+}
+
+.positivo { color: #2ecc71; font-weight: bold; }
+.negativo { color: #e74c3c; font-weight: bold; }
+
+#saldo-total { font-size: 1.8rem; font-weight: bold; }
